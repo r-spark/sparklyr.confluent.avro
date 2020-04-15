@@ -1,11 +1,11 @@
-package sparkavroudf
+package sparklyudf
 
-object AvroUtils {
-  def fromAvro(dataset: org.apache.spark.sql.DataFrame, column: org.apache.spark.sql.Column, schema: String) = {
-    dataset.select(org.apache.spark.sql.avro.from_avro(column, schema))
-  }
-  
-  def toAvro(dataset: org.apache.spark.sql.DataFrame, column: org.apache.spark.sql.Column) = {
-    dataset.select(org.apache.spark.sql.avro.to_avro(column))
+import org.apache.spark.sql.SparkSession;
+
+object Main {
+  def register_hello(spark: SparkSession) = {
+    spark.udf.register("hello", (name: String) => {
+      "Hello, " + name + "! - From Scala"
+    })
   }
 }
