@@ -10,7 +10,7 @@ spark_dependencies <- function(spark_version, scala_version, ...) {
 	            "io.confluent:kafka-avro-serializer:5.4.1",
 				"io.confluent:kafka-schema-registry-client:5.4.1",
 				"io.confluent:kafka-schema-registry:5.4.1", "org.apache.kafka:kafka-clients:5.4.1-ce"),
-	repositories=c("http://central.maven.org/maven2/", "http://packages.confluent.io/maven/"
+	repositories=c("http://central.maven.org/maven2/", "http://packages.confluent.io/maven/")
   )
 }
 
