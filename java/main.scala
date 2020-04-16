@@ -13,7 +13,7 @@ object Main {
     }
   }
   
-  def create_deserializer(spark: SparkSession, kafkaUrl: String, schemaRegistryUrl: String): object = {
+  def create_deserializer(spark: SparkSession, kafkaUrl: String, schemaRegistryUrl: String) = {
     val schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryUrl, 128)
     val kafkaAvroDeserializer = new AvroDeserializer(schemaRegistryClient)
 	object DeserializerWrapper {
