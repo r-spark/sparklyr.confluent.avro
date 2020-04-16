@@ -48,7 +48,7 @@ object Main {
         SchemaConverters.toSqlType(new Schema.Parser().parse(avroSchema))
 	  }
     }
-	spark.udf.register("getAvroSchema", (topic: String) => {
+	spark.udf.register("getSchema", (topic: String) => {
       DeserializerWrapper.getSchema(topic)
 	  }
     )
