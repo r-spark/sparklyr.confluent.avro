@@ -1,1 +1,1 @@
-sparklyr extension package to support deserializing avro messages with support for Confluent Schema Registry.
+sparklyr extension package to support deserializing Confluent Schema Registry avro encoded messages.
