@@ -20,7 +20,7 @@ object Main {
     }
   }
   
-  def create_deserializer(spark: SparkSession, schemaRegistryUrl: String) = {
+  def register_deserialize(spark: SparkSession, schemaRegistryUrl: String) = {
     val schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryUrl, 128)
     val kafkaAvroDeserializer = new AvroDeserializer(schemaRegistryClient)
 	object DeserializerWrapper {
@@ -31,13 +31,27 @@ object Main {
         SchemaConverters.toSqlType(new Schema.Parser().parse(avroSchema))
 	  }
     }
-	spark.udf.register("deserialize", (bytes: Array[Byte]) =>
+	spark.udf.register("deserialize", (bytes: Array[Byte]) => {
       DeserializerWrapper.deserializer.deserialize(bytes)
+	  }
     )
-	spark.udf.register("getAvroSchema", (topic: String) =>
+  }
+  
+  def register_getSchema(spark: SparkSession, schemaRegistryUrl: String) = {
+   val schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryUrl, 128)
+    val kafkaAvroDeserializer = new AvroDeserializer(schemaRegistryClient)
+	object DeserializerWrapper {
+	  val client=schemaRegistryClient
+      val deserializer = kafkaAvroDeserializer
+	  def getSchema(topic: String) {
+	    val avroSchema = schemaRegistryClient.getLatestSchemaMetadata(topic + "-value").getSchema
+        SchemaConverters.toSqlType(new Schema.Parser().parse(avroSchema))
+	  }
+    }
+	spark.udf.register("getAvroSchema", (topic: String) => {
       DeserializerWrapper.getSchema(topic)
+	  }
     )
-	
   }
   
 }
