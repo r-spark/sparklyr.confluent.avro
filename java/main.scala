@@ -1,6 +1,6 @@
 package sparklyudf
 
-import com.databricks.spark.avro.SchemaConverters
+import org.apache.spark.sql.avro._
 import io.confluent.kafka.schemaregistry.client.{CachedSchemaRegistryClient, SchemaRegistryClient}
 import io.confluent.kafka.serializers.AbstractKafkaAvroDeserializer
 import org.apache.avro.Schema
