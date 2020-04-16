@@ -1,5 +1,12 @@
 package sparklyudf
 
+import org.apache.spark.sql.avro.SchemaConverters
+import io.confluent.kafka.schemaregistry.client.{CachedSchemaRegistryClient, SchemaRegistryClient}
+import io.confluent.kafka.serializers.AbstractKafkaAvroDeserializer
+import org.apache.avro.Schema
+import org.apache.avro.generic.GenericRecord
+import org.apache.spark.sql.SparkSession
+
 object Main {
   class AvroDeserializer extends AbstractKafkaAvroDeserializer {
     def this(client: SchemaRegistryClient) {
