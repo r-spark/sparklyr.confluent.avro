@@ -36,7 +36,7 @@ object Main {
 	  }
     )
   }
-  
+  /*
   def register_getSchema(spark: SparkSession, schemaRegistryUrl: String) = {
    val schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryUrl, 128)
     val kafkaAvroDeserializer = new AvroDeserializer(schemaRegistryClient)
@@ -53,5 +53,6 @@ object Main {
 	  }
 	)
   }
+  */
   
 }
