@@ -35,7 +35,7 @@ object Main {
   def register_getSchema(spark: SparkSession, schemaRegistryUrl: String) = {
     val schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryUrl, 128)
 	spark.udf.register("getSchema", (topic: String) => {
-	  SchemaConverters.toSqlType(new Schema.Parser().parse(schemaRegistryClient.getLatestSchemaMetadata(topic + "-value").getSchema))
+	  schemaRegistryClient.getLatestSchemaMetadata(topic + "-value").getSchema
 	  }
 	)
   }
