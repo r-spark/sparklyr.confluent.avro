@@ -19,7 +19,7 @@ object Main {
       genericRecord.toString
     }
   }
-  val schemaRegistryUrl="http://localhost:8081"
+  val schemaRegistryUrl="http://schema-registry:8081"
   val schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryUrl, 128)
   val kafkaAvroDeserializer = new AvroDeserializer(schemaRegistryClient)
   object DeserializerWrapper {
