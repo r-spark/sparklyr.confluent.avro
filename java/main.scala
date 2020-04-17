@@ -49,7 +49,6 @@ object Main {
 	  }
     }
 	spark.udf.register("getSchema", DeserializerWrapper.getSchema)
-    )
   }
   
 }
