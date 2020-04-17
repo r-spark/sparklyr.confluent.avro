@@ -2,6 +2,7 @@ package sparklyudf
 
 import com.hortonworks.spark.registry.util._
 import org.apache.spark.sql.Column
+import org.apache.spark.sql.SparkSession
 
 object Main {
   val schemaRegistryUrl = "http://schema-registry:8081"
