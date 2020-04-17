@@ -34,9 +34,8 @@ object Main {
   }
   def register_getSchema(spark: SparkSession, schemaRegistryUrl: String) = {
     val schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryUrl, 128)
-    val kafkaAvroDeserializer = new AvroDeserializer(schemaRegistryClient)
 	spark.udf.register("getSchema", (topic: String) => {
-	  SchemaConverters.toSqlType(new Schema.Parser().parse(schemaRegistryClient.getLatestSchemaMetadata(topic + "-value").getSchema)
+	  SchemaConverters.toSqlType(new Schema.Parser().parse(schemaRegistryClient.getLatestSchemaMetadata(topic + "-value").getSchema))
 	  }
 	)
   }
