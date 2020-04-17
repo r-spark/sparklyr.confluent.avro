@@ -19,21 +19,21 @@ object Main {
       genericRecord.toString
     }
   }
-  
-  def register_deserialize(spark: SparkSession, schemaRegistryUrl: String) = {
-    val schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryUrl, 128)
-    val kafkaAvroDeserializer = new AvroDeserializer(schemaRegistryClient)
-	object DeserializerWrapper {
+  val schemaRegistryUrl="schema-registry:8081"
+  val schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryUrl, 128)
+  val kafkaAvroDeserializer = new AvroDeserializer(schemaRegistryClient)
+  object DeserializerWrapper {
 	  val client=schemaRegistryClient
       val deserializer = kafkaAvroDeserializer
-    }
+  }
+  
+  def register_deserialize(spark: SparkSession, schemaRegistryUrl: String) = {
 	spark.udf.register("deserialize", (bytes: Array[Byte]) => {
       DeserializerWrapper.deserializer.deserialize(bytes)
 	  }
     )
   }
-  def register_getSchema(spark: SparkSession, schemaRegistryUrl: String) = {
-    val schemaRegistryClient = new CachedSchemaRegistryClient(schemaRegistryUrl, 128)
+  def register_getSchema(spark: SparkSession) = {
 	spark.udf.register("getSchema", (topic: String) => {
 	  schemaRegistryClient.getLatestSchemaMetadata(topic + "-value").getSchema
 	  }
