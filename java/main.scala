@@ -6,13 +6,13 @@ import org.apache.spark.sql.SparkSession
 
 object Main {
   val schemaRegistryUrl = "http://schema-registry:8081"
-  import spark.implicits._
   val config = Map[String, Object]("schema.registry.url" -> schemaRegistryUrl)
   implicit val srConfig: SchemaRegistryConfig = SchemaRegistryConfig(config)
   
   def register_deserialize(spark: SparkSession, schemaRegistryUrl: String) = {
+    import spark.implicits._
 	spark.udf.register("deserialize", (data: Column, topic: String) => {
-      from_sr(bytes, topic)
+      from_sr(data, topic)
 	  }
     )
   }
