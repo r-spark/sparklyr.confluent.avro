@@ -9,7 +9,7 @@ object Main {
   val config = Map[String, Object]("schema.registry.url" -> schemaRegistryUrl)
   implicit val srConfig: SchemaRegistryConfig = SchemaRegistryConfig(config)
   
-  def register_deserialize(spark: SparkSession, schemaRegistryUrl: String) = {
+  def register_deserialize(spark: SparkSession) = {
     import spark.implicits._
 	spark.udf.register("deserialize", (data: Column, topic: String) => {
       from_sr(data, topic)
