@@ -6,7 +6,7 @@ spark_dependencies <- function(spark_version, scala_version, ...) {
         package = "sparklyudf"
       )
     )
-    #packages = c("com.hortonworks:spark-schema-registry:0.1-SNAPSHOT", "org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.5")
+    packages = c("com.hortonworks:spark-schema-registry:0.1-SNAPSHOT", "org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.5")
   )
 }
 
