@@ -12,7 +12,7 @@ object Main {
   def register_deserialize(spark: SparkSession) = {
     import spark.implicits._
 	spark.udf.register("deserialize", (data: Column, topic: String) => {
-      from_sr(data, topic)
+      from_sr(data, topic).toString()
 	  }
     )
   }
