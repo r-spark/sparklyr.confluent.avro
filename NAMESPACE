@@ -1,2 +1,2 @@
-export(sparklyudf_register)
+export(stream_read_kafka_avro)
 import(sparklyr)
