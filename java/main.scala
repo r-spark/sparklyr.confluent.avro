@@ -1,20 +1,37 @@
 package sparklyudf
 
-import com.hortonworks.spark.registry.util._
-import org.apache.spark.sql.Column
-import org.apache.spark.sql.SparkSession
+import java.util.Properties
 
-object Main {
-  val schemaRegistryUrl = "http://schema-registry:8081"
-  val config = Map[String, Object]("schema.registry.url" -> schemaRegistryUrl)
-  implicit val srConfig: SchemaRegistryConfig = SchemaRegistryConfig(config)
+import org.apache.spark.sql.functions.col
+import org.apache.spark.sql.{DataFrame, Dataset, Row}
+import za.co.absa.abris.examples.utils.ExamplesUtils._
+import org.apache.spark.sql.SparkSession
+import za.co.absa.abris.avro.functions.from_confluent_avro
+
+object Reader {
+  val PARAM_JOB_MASTER = "job.master"
+  val PARAM_JOB_NAME = "job.name"
+  val PARAM_LOG_LEVEL = "log.level"
+  val kafkaUrl = "broker:9092"
+  val schemaRegistryUrl="http://schema-registry:8081"
   
-  def register_deserialize(spark: SparkSession) = {
-    import spark.implicits._
-	spark.udf.register("deserialize", (data: Column, topic: String) => {
-      from_sr(data, topic).toString()
-	  }
-    )
+  def stream(topic: String) = {
+    val properties = new Properties()
+	properties.setProperty("job.name", "SampleJob")
+	properties.setProperty("job.master", "local[*]")
+	properties.setProperty("key.schema.id", "latest")
+	properties.setProperty("value.schema.id", "latest")
+	properties.setProperty("value.schema.naming.strategy", "topic.name")
+	properties.setProperty("schema.name", "native_complete")
+	properties.setProperty("schema.registry.topic", topic)
+	properties.setProperty("option.subscribe", topic)
+	properties.setProperty("schema.namespace", "all-types.test")
+	properties.setProperty("key.schema.id", "latest")
+	properties.setProperty("log.level", "ERROR")
+	properties.setProperty("schema.registry.url", schemaRegistryUrl)
+	val spark = getSparkSession(properties, PARAM_JOB_NAME, PARAM_JOB_MASTER, PARAM_LOG_LEVEL)
+	val schemaRegistryConfig = properties.getSchemaRegistryConfigurations("option.subscribe")
+    val stream = spark.readStream.format("kafka").option("startingOffsets", "earliest").option("kafka.bootstrap.servers", kafkaUrl).addOptions(properties)
+    stream.load().select(from_confluent_avro(col("value"), schemaRegistryConfig) as 'data)
   }
-  
 }
