@@ -1,6 +1,6 @@
 sparklyr extension package to support deserializing Confluent Schema Registry avro encoded messages.
 Usage:
-
+```
   library(sparklyudf)
   library(sparklyr)
   library(dplyr)
@@ -24,3 +24,4 @@ Usage:
   tbl(sc, .) %>%
   group_by(id) %>%
   summarise(n=count()) 
+````
