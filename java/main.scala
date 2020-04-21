@@ -1,4 +1,4 @@
-package sparklyudf
+package sparklyr_confluent_avro
 
 import java.util.Properties
 
