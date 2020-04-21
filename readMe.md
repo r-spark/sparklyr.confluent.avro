@@ -17,7 +17,7 @@ Usage:
   stream_write_memory("p")
 
   # sql style 'eager' returns an R dataframe
-  query <- 'select data.timestamp, data.side, data.id from p'
+  query <- 'select value.timestamp, value.side, value.id from p'
   res   <- DBI::dbGetQuery(sc, statement =query)
 
   # dbplyr style 'lazy' returns a spark dataframe stream
