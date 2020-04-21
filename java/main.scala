@@ -1,4 +1,4 @@
-package sparklyr_confluent_avro
+package sparklyr.confluent.avro
 
 import java.util.Properties
 
