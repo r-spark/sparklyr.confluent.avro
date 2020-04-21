@@ -25,7 +25,7 @@ object Reader {
 	properties.setProperty("key.schema.id", "latest")
 	properties.setProperty("log.level", logLevel)
 	properties.setProperty("schema.registry.url", schemaRegistryUrl)
-	val spark = getSparkSession(properties, jobName, master, logLevel)
+	val spark = getSparkSession(properties, "job.name", "job.master", "log.level")
 	val schemaRegistryConfig = properties.getSchemaRegistryConfigurations("option.subscribe")
     val stream = spark.readStream.format("kafka").option("startingOffsets", startingOffsets).option("kafka.bootstrap.servers", kafkaUrl).addOptions(properties)
     stream.load().select(from_confluent_avro(col("value"), schemaRegistryConfig) as 'data)
