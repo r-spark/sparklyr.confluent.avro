@@ -1,6 +1,6 @@
-Package: sparklyr-confluent-avro
+Package: sparklyr.confluent.avro
 Type: Package
-Title: sparklyr-confluent-avro: support for Confluent Schema Registry
+Title: sparklyr.confluent.avro: support for Confluent Schema Registry
 Version: 0.1.0
 Maintainer: JFP <jperreton@gmail.com>
 Description: schema registry aware avro deserializer
