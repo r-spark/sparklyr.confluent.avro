@@ -9,17 +9,17 @@ stream_read_kafka_avro(sc, "topic.name", startingOffsets="earliest")
 
   \item{topic}{A character, topic name}
   
-  \item{master} spark master url
+  \item{master}{spark master url}
   
-  \item{startingOffsets} "earliest" or "latest"
+  \item{startingOffsets}{"earliest" or "latest"}
   
-  \item{kafkaUrl} kafka broker url
+  \item{kafkaUrl}{kafka broker url}
   
-  \item{schemaRegistryUrl} confluent schema registry url
+  \item{schemaRegistryUrl}{confluent schema registry url}
   
-  \item{logLevel} a character, the desired log level
+  \item{logLevel}{a character, the desired log level}
   
-  \item{jobName} a character, the spark job name
+  \item{jobName}{a character, the spark job name}
   
 }
 \value{
