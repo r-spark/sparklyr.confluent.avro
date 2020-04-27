@@ -32,7 +32,7 @@ object Bridge {
     stream.load().select(from_confluent_avro(col("value"), schemaRegistryConfig) as 'value)
   }
   
-  def stream_write(topic: String, dataFrame: Dataset[Row], structName: String, kafkaUrl: String = "broker:9092", schemaRegistryUrl: String = "http://schema-registry:8081",                
+  def stream_write(topic: String, dataFrame: Dataset[Row], kafkaUrl: String = "broker:9092", schemaRegistryUrl: String = "http://schema-registry:8081",                
                    valueSchemaNamingStrategy: String = "topic.name", avroRecordName: String = "RecordName",
 				   avroRecordNamespace: String = "RecordNamespace") = {
     val registryConfig = Map(
@@ -42,6 +42,11 @@ object Bridge {
       "schema.name" -> avroRecordName,
       "schema.namespace"-> avroRecordNamespace
       )
-    dataFrame.select(to_confluent_avro(col(structName), registryConfig) as 'value).writeStream.format("kafka").option("kafka.bootstrap.servers", kafkaUrl).option("topic", topic).option("checkpointLocation", "a").start()
+	val allColumns = struct(dataFrame.columns.head, dataFrame.columns.tail: _*)
+    dataFrame.select(to_confluent_avro(allColumns, registryConfig) as 'value).writeStream.format("kafka").option("kafka.bootstrap.servers", kafkaUrl).option("topic", topic).option("checkpointLocation", "a").start()
   }
 }
+
+// val x = bridge.stream_read("parameter")
+// Bridge.stream_write("parameter_3", x, "value", avroRecordName="record", avroRecordNamespace="indicator")
+// Bridge.stream_read("parameter_3")
