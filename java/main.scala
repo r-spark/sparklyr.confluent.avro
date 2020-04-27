@@ -32,8 +32,7 @@ object Bridge {
     stream.load().select(from_confluent_avro(col("value"), schemaRegistryConfig) as 'value)
   }
   
-  def stream_write(topic: String, dataFrame: Dataset[Row], structName: String, schemaRegistryUrl: String = "http://schema-registry:8081",
-                   kafkaUrl: String = "broker:9092",
+  def stream_write(topic: String, dataFrame: Dataset[Row], structName: String, kafkaUrl: String = "broker:9092", schemaRegistryUrl: String = "http://schema-registry:8081",                
                    valueSchemaNamingStrategy: String = "value.schema.naming.strategy", avroRecordName: String = "avro.record.name",
 				   avroRecordNamespace: String = "avro.record.namespace") = {
     val registryConfig = Map(
