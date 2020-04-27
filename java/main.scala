@@ -33,6 +33,7 @@ object Bridge {
   }
   
   def stream_write(topic: String, dataFrame: Dataset[Row], structName: String, schemaRegistryUrl: String = "http://schema-registry:8081",
+                   kafkaUrl: String = "broker:9092",
                    valueSchemaNamingStrategy: String = "value.schema.naming.strategy", avroRecordName: String = "avro.record.name",
 				   avroRecordNamespace: String = "avro.record.namespace") = {
     val registryConfig = Map(
@@ -44,6 +45,7 @@ object Bridge {
       )
     dataFrame.select(to_confluent_avro(col(structName), registryConfig) as 'value) .write
         .format("kafka")
+		.option("kafka.bootstrap.servers", kafkaUrl)
 		.option("topic", topic)
         .save()  
   }
