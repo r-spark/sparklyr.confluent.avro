@@ -8,6 +8,7 @@ import za.co.absa.abris.examples.utils.ExamplesUtils._
 import org.apache.spark.sql.SparkSession
 import za.co.absa.abris.avro.functions.from_confluent_avro
 import za.co.absa.abris.avro.functions.to_confluent_avro
+import org.apache.spark.sql.functions.struct
 
 object Bridge {
   
