@@ -44,6 +44,7 @@ object Bridge {
       )
     dataFrame.select(to_confluent_avro(col(structName), registryConfig) as 'value) .write
         .format("kafka")
+		.option("topic", topic)
         .save()  
   }
 }
