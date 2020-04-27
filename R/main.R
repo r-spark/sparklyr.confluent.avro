@@ -6,7 +6,7 @@ stream_read_kafka_avro <- function(sc, topic, master= "local[*]", startingOffset
 }
 
 stream_write_kafka_avro <- function(sc, topic, dataFrame, structName, kafkaUrl= "broker:9092", schemaRegistryUrl="http://schema-registry:8081",
-                   valueSchemaNamingStrategy= "value.schema.naming.strategy", avroRecordName="avro.record.name",
-				   avroRecordNamespace= "avro.record.namespace") {
+                   valueSchemaNamingStrategy= "topic.name", avroRecordName="RecordName",
+				   avroRecordNamespace= "RecordNamespace") {
   invoke_static(sc, "sparklyr.confluent.avro.Bridge", "stream_write", topic, dataFrame, structName, kafkaUrl, schemaRegistryUrl, valueSchemaNamingStrategy, avroRecordName,avroRecordNamespace)
 }
