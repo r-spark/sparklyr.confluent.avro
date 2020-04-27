@@ -33,8 +33,8 @@ object Bridge {
   }
   
   def stream_write(topic: String, dataFrame: Dataset[Row], structName: String, kafkaUrl: String = "broker:9092", schemaRegistryUrl: String = "http://schema-registry:8081",                
-                   valueSchemaNamingStrategy: String = "value.schema.naming.strategy", avroRecordName: String = "avro.record.name",
-				   avroRecordNamespace: String = "avro.record.namespace") = {
+                   valueSchemaNamingStrategy: String = "topic.name", avroRecordName: String = "RecordName",
+				   avroRecordNamespace: String = "RecordNamespace") = {
     val registryConfig = Map(
       "schema.registry.topic" -> topic,
       "schema.registry.url" -> schemaRegistryUrl,
