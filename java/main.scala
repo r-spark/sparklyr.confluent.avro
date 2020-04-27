@@ -42,10 +42,6 @@ object Bridge {
       "schema.name" -> avroRecordName,
       "schema.namespace"-> avroRecordNamespace
       )
-    dataFrame.select(to_confluent_avro(col(structName), registryConfig) as 'value) .write
-        .format("kafka")
-		.option("kafka.bootstrap.servers", kafkaUrl)
-		.option("topic", topic)
-        .save()  
+    dataFrame.select(to_confluent_avro(col(structName), registryConfig) as 'value).writeStream.format("kafka").option("kafka.bootstrap.servers", kafkaUrl).option("topic", topic).option("checkpointLocation", "a").start()
   }
 }
