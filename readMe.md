@@ -33,8 +33,10 @@ stream_write_kafka_avro(sc, topic="output", dataFrame=.)
 # read avro data and push to memory
 stream_read_kafka_avro(sc, "output", startingOffsets="earliest") %>%
 invoke("select", "value.timestamp", list("value.id", "value.side")) %>%
-stream_watermark() %>%
+sdf_register() %>%
 mutate(side=2*side) %>%
+group_by(id) %>%
+summarise(n=count()) %>%
 stream_write_memory("q")
 
 # sql style 'eager' returns an R dataframe
@@ -46,5 +48,4 @@ res   <- DBI::dbGetQuery(sc, statement =query)
 dbplyr::sql() %>%
 tbl(sc, .) %>%
 stream_write_memory("u")
-spark_dataframe()
 ````
