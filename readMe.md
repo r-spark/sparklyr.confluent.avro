@@ -1,5 +1,8 @@
 sparklyr extension package to support deserializing Confluent Schema Registry avro encoded messages.
-You can find a Vagrant/docker-compose playground to test it over here: https://github.com/HikaGenji/sparklyr.confluent.avro.playground
+
+You can find a Vagrant/docker-compose playground to test it over here: 
+
+https://github.com/HikaGenji/sparklyr.confluent.avro.playground
 
 Some sample usage:
 
