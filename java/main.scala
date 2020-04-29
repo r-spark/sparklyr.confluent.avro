@@ -12,8 +12,8 @@ import org.apache.spark.sql.functions.struct
 
 object Bridge {
   
-  def stream_read(topic: String, master: String = "local[*]", startingOffsets: String = "latest", kafkaUrl: String = "broker:9092",
-             schemaRegistryUrl: String = "http://schema-registry:8081", logLevel: String = "ERROR", jobName: String = "sample") = {
+  def stream_read(topic: String, master: String, startingOffsets: String, kafkaUrl: String,
+             schemaRegistryUrl: String, logLevel: String, jobName: String) = {
     val properties = new Properties()
 	properties.setProperty("job.name", jobName)
 	properties.setProperty("job.master", master)
@@ -33,9 +33,9 @@ object Bridge {
     stream.load().select(from_confluent_avro(col("value"), schemaRegistryConfig) as 'value)
   }
   
-  def stream_write(topic: String, dataFrame: Dataset[Row], kafkaUrl: String = "broker:9092", schemaRegistryUrl: String = "http://schema-registry:8081",                
-                   valueSchemaNamingStrategy: String = "topic.name", avroRecordName: String = "RecordName",
-				   avroRecordNamespace: String = "RecordNamespace", checkpointLocation: String = "a") = {
+  def stream_write(topic: String, dataFrame: Dataset[Row], kafkaUrl: String, schemaRegistryUrl: String,                
+                   valueSchemaNamingStrategy: String, avroRecordName: String,
+				   avroRecordNamespace: String, checkpointLocation: String) = {
     val registryConfig = Map(
       "schema.registry.topic" -> topic,
       "schema.registry.url" -> schemaRegistryUrl,
