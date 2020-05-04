@@ -14,5 +14,6 @@ stream_read_kafka_avro <- function(sc, topic, master= "local[*]", startingOffset
 stream_write_kafka_avro <- function(sc, topic, dataFrame, kafkaUrl, schemaRegistryUrl,
                    valueSchemaNamingStrategy= "topic.name", avroRecordName="RecordName",
 				   avroRecordNamespace= "RecordNamespace", checkPointLocation="a") {
-  invoke_static(sc, "sparklyr.confluent.avro.Bridge", "stream_write", topic, dataFrame=dataFrame, kafkaUrl, schemaRegistryUrl, valueSchemaNamingStrategy, avroRecordName,avroRecordNamespace, checkPointLocation)
+  t <- dataFrame %>% spark_dataframe()
+  invoke_static(sc, "sparklyr.confluent.avro.Bridge", "stream_write", topic, dataFrame=t, kafkaUrl, schemaRegistryUrl, valueSchemaNamingStrategy, avroRecordName,avroRecordNamespace, checkPointLocation)
 }
