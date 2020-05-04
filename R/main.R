@@ -8,7 +8,7 @@ stream_read_kafka_avro <- function(sc, topic, master= "local[*]", startingOffset
   invoke_static(sc, "sparklyr.confluent.avro.Bridge", "stream_read", topic, master, startingOffsets, kafkaUrl, schemaRegistryUrl, logLevel, jobName) %>%
   invoke("select", "value.*", list()) %>%
   stream_write_memory(name)
-  dbplyr::sql(paste0("* from ", name)) %>% 
+  dbplyr::sql(paste0("select * from ", name)) %>% 
   tbl(sc, .) 
 }
 
