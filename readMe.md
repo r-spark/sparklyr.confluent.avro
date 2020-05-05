@@ -17,11 +17,13 @@ config$sparklyr.shell.repositories <- "http://packages.confluent.io/maven/"
 
 sc <- spark_connect(master = "local", spark_home = "spark", config=config)
 
-stream_read_kafka_avro(sc, "parameter", startingOffsets="earliest") %>%
-stream_write_memory("p")
+stream_read_kafka_avro(sc, "parameter", startingOffsets="earliest", kafkaUrl=kafkaUrl, schemaRegistryUrl=schemaRegistryUrl) %>%
+mutate(qty=side ^ 2) %>%
+stream_write_kafka_avro(sc, topic="output", dataFrame=., kafkaUrl=kafkaUrl, schemaRegistryUrl=schemaRegistryUrl)
 
+stream_read_kafka_avro(sc, "output", startingOffsets="earliest", kafkaUrl=kafkaUrl, schemaRegistryUrl=schemaRegistryUrl) 
 # sql style 'eager' returns an R dataframe
-query <- 'select value.timestamp, value.side, value.id from p'
+query <- 'select * from output'
 res   <- DBI::dbGetQuery(sc, statement =query)
 
 # dbplyr style 'lazy' returns a spark dataframe stream
@@ -29,29 +31,18 @@ query %>%
 dbplyr::sql() %>%
 tbl(sc, .) %>%
 group_by(id) %>%
-summarise(n=count()) 
+summarise(n=count())
 
-# read avro data, unstruct and push to avro data (stream_write_avro wraps columns into a struct automatically)
-stream_read_kafka_avro(sc, "parameter", startingOffsets="earliest") %>%
-invoke("select", "value.timestamp", list("value.id", "value.side")) %>%
-stream_write_kafka_avro(sc, topic="output", dataFrame=.)
 
-# read avro data and push to memory
-stream_read_kafka_avro(sc, "output", startingOffsets="earliest") %>%
-invoke("select", "value.timestamp", list("value.id", "value.side")) %>%
-sdf_register() %>%
-mutate(side=2*side) %>%
-group_by(id) %>%
-summarise(n=count()) %>%
-stream_write_memory("q")
+tbl(sc, "output") %>%
+groupBy(c(window(., "timestamp", "10 seconds", "5 seconds"), col(., "id"))) %>%
+count
 
-# sql style 'eager' returns an R dataframe
-query <- 'select value.timestamp, value.side, value.id from q'
-res   <- DBI::dbGetQuery(sc, statement =query)
+tbl(sc, "output") %>%
+groupBy(c(window(., "timestamp", "10 seconds", "5 seconds"), col(., "id"))) %>%
+agg(avg(side*side))
 
-# query from memory
-'select value.timestamp as timestamp, value.side as side, value.id as id from q' %>%
-dbplyr::sql() %>%
-tbl(sc, .) %>%
-stream_write_memory("u")
+tbl(sc, "output") %>%
+groupBy(c(window(., "timestamp", "10 seconds", "5 seconds"), col(., "id"))) %>%
+agg(avg(side), avg(id))
 ````
