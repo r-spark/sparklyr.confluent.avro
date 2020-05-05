@@ -15,11 +15,17 @@ col <- function(sc, colname) {
 }
 
 count <- function(sc) {
-  invoke(sc, "count")
+  name <- random_string("sparklyr_tmp_")
+  invoke(sc, "count")%>%
+  invoke("createOrReplaceTempView", name)
+  tbl(sc$connection, name)
 }
 
 agg <- function(sc, ...) {
   expr <- sapply(substitute(list(...)), deparse)[-1]
+  name <- random_string("sparklyr_tmp_")
   s <- lapply(expr, function(e) invoke_static(sc$connection, "org.apache.spark.sql.functions", "expr", e))
-  invoke(sc, "agg", s[[1]], s[-1])
+  invoke(sc, "agg", s[[1]], s[-1])%>%
+  invoke("createOrReplaceTempView", name)
+  tbl(sc$connection, name)
 }
