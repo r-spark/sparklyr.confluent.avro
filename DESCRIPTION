@@ -2,7 +2,7 @@ Package: sparklyr.confluent.avro
 Type: Package
 Title: sparklyr.confluent.avro: support for Confluent Schema Registry
 Version: 0.1.0
-Authors@R: person("jf", "perreton", email = "jperreton@gmail.com", role = c("aut"))
+Authors@R: c(person("jf", "perreton", email = "jperreton@gmail.com", role = c("aut")))
 Maintainer: JFP <jperreton@gmail.com>
 Description: schema registry aware avro deserializer
 License: Apache License (>= 2.0)
