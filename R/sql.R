@@ -18,7 +18,8 @@ count <- function(sc) {
   invoke(sc, "count")
 }
 
-agg <- function(sc, expr) {
+agg <- function(sc, ...) {
+  expr <- sapply(substitute(list(...)), deparse)[-1]
   s <- lapply(expr, function(e) invoke_static(sc$connection, "org.apache.spark.sql.functions", "expr", e))
   invoke(sc, "agg", s[[1]], s[-1])
 }
