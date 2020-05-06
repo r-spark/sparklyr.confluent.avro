@@ -9,5 +9,5 @@ License: Apache License (>= 2.0)
 Depends:
     R (>= 3.1.2)
 Imports:
-    sparklyr,
+    sparklyr, stringr
 RoxygenNote: 6.0.0
