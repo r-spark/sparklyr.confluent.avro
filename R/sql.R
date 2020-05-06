@@ -14,13 +14,6 @@ col <- function(sc, colname) {
   colExpr(sc, colname)
 }
 
-count <- function(sc) {
-  name <- random_string("sparklyr_tmp_")
-  invoke(sc, "count")%>%
-  invoke("createOrReplaceTempView", name)
-  tbl(sc$connection, name)
-}
-
 agg <- function(sc, ...) {
   expr <- sapply(substitute(list(...)), deparse)[-1]
   name <- random_string("sparklyr_tmp_")
