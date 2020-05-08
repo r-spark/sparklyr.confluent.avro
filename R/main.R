@@ -8,7 +8,8 @@ stream_read_kafka_avro <- function(sc, topic, master= "local[*]", startingOffset
   invoke_static(sc, "sparklyr.confluent.avro.Bridge", "stream_read", topic, master, startingOffsets, kafkaUrl, schemaRegistryUrl, logLevel, jobName) %>%
   invoke("select", "value.*", list()) %>% 
   invoke("createOrReplaceTempView", name)
-  tbl(sc, name)
+  tbl(sc, name) %>%
+  sdf_register()
 }
 
 stream_write_kafka_avro <- function(sc, topic, dataFrame, kafkaUrl, schemaRegistryUrl,
