@@ -1,11 +1,11 @@
 #' @import sparklyr
 #' @export
-stream_read_kafka_avro <- function(sc, topic, master= "local[*]", startingOffsets="latest", kafkaUrl,
+stream_read_kafka_avro <- function(sc, topic, startingOffsets="latest", kafkaUrl,
              schemaRegistryUrl, logLevel= "ERROR", jobName="sample", name=NULL) {
   if(is.null(name)) {
     name <- topic
   }
-  invoke_static(sc, "sparklyr.confluent.avro.Bridge", "stream_read", topic, master, startingOffsets, kafkaUrl, schemaRegistryUrl, logLevel, jobName) %>%
+  invoke_static(sc, "sparklyr.confluent.avro.Bridge", "stream_read", topic, sc$master, startingOffsets, kafkaUrl, schemaRegistryUrl, logLevel, jobName) %>%
   invoke("select", "value.*", list()) %>% 
   invoke("createOrReplaceTempView", name)
   tbl(sc, name)
