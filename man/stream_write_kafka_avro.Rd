@@ -20,6 +20,9 @@ every 5 seconds. See \code{\link{stream_trigger_interval}} and
 
 \item{checkpoint}{The location where the system will write all the checkpoint
 information to guarantee end-to-end fault-tolerance.}
+  \item{value.schema.naming.strategy}{schema naming strategy}
+      \item{value.schema.naming.strategy}{schema naming strategy}
+	  \item{schema.namespace}{schema namespace}
   
 }
 \value{

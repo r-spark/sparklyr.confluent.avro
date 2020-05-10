@@ -11,7 +11,7 @@ stream_read_kafka_avro(sc, "topic.name", startingOffsets="earliest")
   \item{schemaRegistryUrl}{confluent schema registry url}  
   \item{startingOffsets}{"earliest" or "latest"}
   
-  \item{value.schema.naming.strategy}{a character, the desired log level}
+  \item{value.schema.naming.strategy}{schema naming strategy}
  
   \item{value.schema.id}{schema id}
   \item{name}{view name if any}
