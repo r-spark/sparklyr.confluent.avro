@@ -2,7 +2,7 @@
 \alias{stream_read_kafka_avro}
 \title{read kafka avro topic}
 \usage{
-stream_read_kafka_avro(sc, "topic.name", startingOffsets="earliest") 
+stream_read_kafka_avro(sc, kafka.bootstrap.servers=kafkaUrl, schema.registry.topic="parameter", startingOffsets="earliest", schema.registry.url=schemaRegistryUrl)
 }
 \arguments{
   \item{sc}{spark context}

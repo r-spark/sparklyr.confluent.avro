@@ -2,7 +2,8 @@
 \alias{stream_write_kafka_avro}
 \title{write kafka avro topic}
 \usage{
-stream_write_kafka_avro(x, "topic.name") 
+stream_write_kafka_avro(kafka.bootstrap.servers=kafkaUrl, schema.registry.topic="output", schema.registry.url=schemaRegistryUrl) 
+
 }
 \arguments{
   \item{x}{spark stream}
