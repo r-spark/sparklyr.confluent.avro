@@ -1,9 +1,9 @@
 #' @import sparklyr
 #' @export
-stream_read_kafka_avro <- function (sc, kafka.bootstrap.servers, schema.registry.topic, startingOffsets, 
-                                    schema.registry.url, value.schema.naming.strategy, value.schema.id, name = NULL, ...) {
+stream_read_kafka_avro <- function (sc, kafka.bootstrap.servers, schema.registry.topic, schema.registry.url, startingOffsets="latest", 
+                                    value.schema.naming.strategy="topic.name", value.schema.id="latest", name = NULL, ...) {
  if(is.null(name)) {
-    name <- topic
+    name <- schema.registry.topic
   }
   registryConfig <- new.env()
   registryConfig$schema.registry.topic <- schema.registry.topic
@@ -20,9 +20,10 @@ stream_read_kafka_avro <- function (sc, kafka.bootstrap.servers, schema.registry
 
 #' @import sparklyr
 #' @export
-stream_write_kafka_avro <- function (x, mode = c("append", "complete", "update"), trigger = stream_trigger_interval(), 
-    checkpoint = file.path("checkpoints", random_string("")), kafka.bootstrap.servers, schema.registry.topic, schema.registry.url, 
-	value.schema.naming.strategy, schema.name, schema.namespace,
+stream_write_kafka_avro <- function (x, kafka.bootstrap.servers, schema.registry.topic, schema.registry.url, 
+    mode = c("append", "complete", "update"), trigger = stream_trigger_interval(), 
+    checkpoint = file.path("checkpoints", random_string("")),
+	value.schema.naming.strategy="topic.name", schema.name="record", schema.namespace="namespace",
     options = list(), ...) {
   registryConfig <- new.env()
   registryConfig$schema.registry.topic <- schema.registry.topic
@@ -33,6 +34,6 @@ stream_write_kafka_avro <- function (x, mode = c("append", "complete", "update")
   x %>%
   spark_dataframe() %>%
   invoke("select", list(invoke(invoke_static(sc, "org.apache.spark.sql.functions", "struct", head(invoke(., "columns"), 1)[[1]], tail(invoke(., "columns"), -1)), "as", "value"))) %>%
-  invoke("select", list(invoke(invoke_static(sc, "za.co.absa.abris.avro.functions", "to_confluent_avro", invoke_static(sc, "org.apache.spark.sql.functions", "col", "value"), writeRegistryConfig), "as", "value"))) %>% 
+  invoke("select", list(invoke(invoke_static(sc, "za.co.absa.abris.avro.functions", "to_confluent_avro", invoke_static(sc, "org.apache.spark.sql.functions", "col", "value"), registryConfig), "as", "value"))) %>% 
   stream_write_kafka(options=list(kafka.bootstrap.servers = kafka.bootstrap.servers, topic = schema.registry.topic)) 
 }
