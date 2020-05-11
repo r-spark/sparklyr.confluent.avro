@@ -12,6 +12,7 @@ library(sparklyr)
 library(dplyr)
 
 config <- spark_config()
+config$sparklyr.shell.repositories <- "http://packages.confluent.io/maven/"
 kafkaUrl <- "broker:9092"
 schemaRegistryUrl <- "http://schema-registry:8081"
 sc <- spark_connect(master = "spark://spark-master:7077", spark_home = "spark", config=config)
