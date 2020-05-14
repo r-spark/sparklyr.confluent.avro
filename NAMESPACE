@@ -1,8 +1,2 @@
 export(stream_read_kafka_avro)
 export(stream_write_kafka_avro)
-export(col)
-export(window)
-export(agg)
-export(groupBy)
-export(colExpr)
-import(sparklyr)
