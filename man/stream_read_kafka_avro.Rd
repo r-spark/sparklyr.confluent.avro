@@ -10,10 +10,10 @@ stream_read_kafka_avro(sc, kafka.bootstrap.servers=kafkaUrl, schema.registry.top
   \item{schema.registry.topic,}{A character, topic name}
   \item{schemaRegistryUrl}{confluent schema registry url}  
   \item{startingOffsets}{"earliest" or "latest"}
-  
-  \item{value.schema.naming.strategy}{schema naming strategy}
- 
-  \item{value.schema.id}{schema id}
+  \item{key.schema.naming.strategy}{key schema naming strategy}
+  \item{value.schema.naming.strategy}{value schema naming strategy}
+  \item{key.schema.id}{key schema id}
+  \item{value.schema.id}{value schema id}
   \item{name}{view name if any}
   
 }

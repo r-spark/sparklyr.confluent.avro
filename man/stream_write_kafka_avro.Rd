@@ -8,7 +8,7 @@ stream_write_kafka_avro(kafka.bootstrap.servers=kafkaUrl, schema.registry.topic=
 \arguments{
   \item{x}{spark stream}
 
-    \item{kafka.bootstrap.servers}{kafka brokers url}
+  \item{kafka.bootstrap.servers}{kafka brokers url}
   \item{schema.registry.topic,}{A character, topic name}
   \item{schemaRegistryUrl}{confluent schema registry url}  
   
@@ -21,9 +21,11 @@ every 5 seconds. See \code{\link{stream_trigger_interval}} and
 
 \item{checkpoint}{The location where the system will write all the checkpoint
 information to guarantee end-to-end fault-tolerance.}
-  \item{value.schema.naming.strategy}{schema naming strategy}
-      \item{value.schema.naming.strategy}{schema naming strategy}
+
+  \item{key.schema.naming.strategy}{key schema naming strategy}
+      \item{value.schema.naming.strategy}{value schema naming strategy}
 	  \item{schema.namespace}{schema namespace}
+	  \item{key cols}{columns part of the key}
   
 }
 \value{
