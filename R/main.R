@@ -23,15 +23,27 @@ stream_read_kafka_avro <- function (sc, kafka.bootstrap.servers, schema.registry
        invoke("select", list(
                         invoke(invoke_static(sc, "za.co.absa.abris.avro.functions", "from_confluent_avro", invoke_static(sc, "org.apache.spark.sql.functions", "col", "key"), keyRegistryConfig), "as", "key"),
                         invoke(invoke_static(sc, "za.co.absa.abris.avro.functions", "from_confluent_avro", invoke_static(sc, "org.apache.spark.sql.functions", "col", "value"), valueRegistryConfig), "as", "value")))
-  keyCol   <- t %>% invoke("select", "key.*", list()) %>% invoke("columns") %>% unlist
+  schema      <- t %>% invoke("schema") %>% invoke("fields")
+  keySchema   <- schema[[1]] %>% invoke("dataType") %>% invoke("toString")
+  valueSchema <- schema[[2]] %>% invoke("dataType") %>% invoke("toString")
+  if(keySchema=="StringType") {
+    keyCol   <- t %>% invoke("select", "key", list()) %>% invoke("columns") %>% unlist
+  } else {
+    keyCol   <- t %>% invoke("select", "key.*", list()) %>% invoke("columns") %>% unlist
+  }
   valueCol <- t %>% invoke("select", "value.*", list()) %>% invoke("columns") %>% unlist 
   
   if(all(keyCol %in% valueCol)) {
     t %>% invoke("select", "value.*", list()) %>%
     invoke("createOrReplaceTempView", name)
   } else {
-    t %>% invoke("select", "value.*", list(paste0("key.", keyCol))) %>%
-    invoke("createOrReplaceTempView", name)
+    if(keySchema=="StringType") {
+	  t %>% invoke("select", "value.*", list(keyCol)) %>%
+      invoke("createOrReplaceTempView", name)
+	} else {
+	  t %>% invoke("select", "value.*", list(keyCol %>% paste0("key.", .))) %>%
+      invoke("createOrReplaceTempView", name)
+	}
   }
   tbl(sc, name)
 }
