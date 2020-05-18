@@ -1,7 +1,7 @@
 #' @import sparklyr
 #' @export
 stream_read_kafka_avro <- function (sc, kafka.bootstrap.servers, schema.registry.topic, schema.registry.url, startingOffsets="latest", 
-                                    key.schema.naming.strategy="record.name", key.schema.id="latest"
+                                    key.schema.naming.strategy="record.name", key.schema.id="latest",
                                     value.schema.naming.strategy="topic.name", value.schema.id="latest", name = NULL, ...) {
  if(is.null(name)) {
     name <- schema.registry.topic
