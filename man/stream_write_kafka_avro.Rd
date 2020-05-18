@@ -26,6 +26,7 @@ information to guarantee end-to-end fault-tolerance.}
       \item{value.schema.naming.strategy}{value schema naming strategy}
 	  \item{schema.namespace}{schema namespace}
 	  \item{key cols}{columns part of the key}
+	  \item{options}{options for stream_read_kafka}
   
 }
 \value{
