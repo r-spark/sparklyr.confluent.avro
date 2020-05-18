@@ -42,7 +42,7 @@ stream_read_kafka_avro <- function (sc, kafka.bootstrap.servers, schema.registry
 stream_write_kafka_avro <- function (x, kafka.bootstrap.servers, schema.registry.topic, schema.registry.url, 
     mode = c("append", "complete", "update"), trigger = stream_trigger_interval(), 
     checkpoint = file.path("checkpoints", random_string("")), key.schema.naming.strategy="topic.name",
-	value.schema.naming.strategy="topic.name", schema.namespace="namespace", key="key",
+	value.schema.naming.strategy="topic.name", schema.namespace="namespace", keyCols="key",
     options = list(), ...) {
   keyRegistryConfig <- new.env()
   keyRegistryConfig$schema.registry.topic <- schema.registry.topic
@@ -58,7 +58,7 @@ stream_write_kafka_avro <- function (x, kafka.bootstrap.servers, schema.registry
   valueRegistryConfig$schema.namespace <- schema.namespace
   x %>%
   spark_dataframe() %>%
-  invoke("select", list(invoke(invoke_static(sc, "org.apache.spark.sql.functions", "struct", key, list()), "as", "key"),
+  invoke("select", list(invoke(invoke_static(sc, "org.apache.spark.sql.functions", "struct", head(keyCols, 1), as.list(tail(keyCols, -1))), "as", "key"),
                         invoke(invoke_static(sc, "org.apache.spark.sql.functions", "struct", head(invoke(., "columns"), 1)[[1]], tail(invoke(., "columns"), -1)), "as", "value"))) %>%
   invoke("select", list(
                         invoke(invoke_static(sc, "za.co.absa.abris.avro.functions", "to_confluent_avro", invoke_static(sc, "org.apache.spark.sql.functions", "col", "key"), keyRegistryConfig), "as", "key"),
